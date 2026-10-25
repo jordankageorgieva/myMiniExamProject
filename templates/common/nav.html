@@ -1,0 +1,16 @@
+{% load static %}
+<!-- Navigation Bar -->
+<header>
+    <nav>
+{#        <img src="{% static 'images/headphones.png' %}" alt="headphones"/>#}
+        <a href="{% url 'tasks:home' %}">Home</a>
+        <ul></ul>
+        <ul>
+            <!--Only for user with created profile-->
+            <li><a href="{% url 'tasks:create' %}">Add Task</a></li>
+            <li><a href="{% url 'categories:list' %}">Manage your Categories</a></li>
+            <li><a href="{% url 'profiles:details' %}">Profile</a></li>
+        </ul>
+    </nav>
+</header>
+<!-- End Navigation Bar -->

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section id="detailsPage">
+        <div class="wrapper">
+{#            <div class="albumCover">#}
+{#               #}
+{#                <img src="/images/Lorde.jpg" alt="Cover Image"/>#}
+{#            </div>#}
+
+            <div class="albumInfo">
+                <div class="albumText">
+                   
+                    <h1>Title: {{ task.title }}</h1>
+                    <h4>Category: {{ task.category.name }}</h4>
+                    <h4>Status: {{ task.status }}</h4>
+                    <h4>Due date: {{ task.due_date }}</h4>
+                    <p>
+                        Description: {{ task.description }}
+                    </p>
+                </div>
+
+                <div class="actionBtn">
+                    
+                    <a href="{% url 'tasks:edit' task.pk %}" class="edit">Edit</a>
+                    <a href="{% url 'tasks:delete' task.pk %}" class="remove">Delete</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,170 @@
+:root {
+    color-scheme: light;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #263238;
+    background: #f4f8fb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    color: #263238;
+    background: linear-gradient(135deg, #f7fbff 0%, #eaf5f3 100%);
+    line-height: 1.6;
+}
+
+#box { min-height: 100vh; padding-bottom: 70px; }
+
+header nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem clamp(1rem, 4vw, 3rem);
+    color: #263238;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #dce8e8;
+    box-shadow: 0 3px 14px rgba(32, 59, 69, 0.08);
+}
+
+header nav > img { width: 48px; height: 48px; object-fit: contain; }
+header nav ul { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0 auto; padding: 0; list-style: none; }
+header nav a { display: inline-block; margin: 0; padding: 0.55rem 0.85rem; color: #315e62; border-radius: 8px; font-size: 1rem; text-decoration: none; }
+header nav a:hover, header nav a:focus-visible { color: #164e50; background: #e5f5f1; }
+
+footer {
+    position: fixed;
+    z-index: 5;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    color: #52666a;
+    background: #fff;
+    border-top: 1px solid #dce8e8;
+    text-align: center;
+}
+
+main, #catalogPage, #detailsPage, .createPage, #registerPage, #profileDetails, #profileDelete {
+    color: #263238;
+}
+
+h1, h2, h3, h4 { color: #244f54; text-shadow: none; }
+
+#catalogPage, #detailsPage, .createPage, #registerPage, #profileDetails, #profileDelete,
+.categoryPage {
+    width: min(100% - 2rem, 1000px);
+    margin: 2.5rem auto;
+}
+
+.categoryPage {
+    width: min(100% - 2rem, 620px);
+    text-align: center;
+}
+
+.categoryPage h1,
+.categoryPage h2 {
+    text-align: center;
+}
+
+.categoryPage .category-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.categoryPage .category-list li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.card-box, #detailsPage .wrapper, form fieldset {
+    float: none;
+    height: auto;
+    color: #263238;
+    background: #fff;
+    border: 1px solid #e0e9e9;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(35, 69, 77, 0.1);
+}
+
+#detailsPage .wrapper {
+    padding: 12px;
+}
+
+#detailsPage .wrapper > div {
+    margin: 8px;
+}
+
+.card-box { width: min(100% - 2rem, 760px); margin: 1.25rem auto; padding: 1.5rem; }
+.card-box p, .albumInfo, .albumText { color: #34474b; }
+.card-box img, .albumCover img { max-width: 100%; height: auto; border-radius: 12px; }
+
+form fieldset { padding: clamp(1rem, 3vw, 2rem); }
+form legend { padding: 0 0.5rem; color: #315e62; font-size: 1.25rem; font-weight: 700; }
+form label { display: block; margin: 0.75rem 0 0.25rem; color: #34474b; font-weight: 600; }
+form input, form select, form textarea {
+    max-width: 100%;
+    padding: 0.65rem 0.8rem;
+    color: #263238;
+    background: #fff;
+    border: 1px solid #c7d5d5;
+    border-radius: 8px;
+}
+form input:focus, form select:focus, form textarea:focus { outline: 3px solid rgba(69, 162, 158, 0.2); border-color: #45a29e; }
+
+button, .actionBtn a, .btn-group a, .button-list {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    margin: 0.35rem 0.25rem 0.35rem 0;
+    padding: 0.65rem 1rem;
+    color: #fff;
+    background: #287b78;
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 150ms ease, transform 150ms ease;
+}
+button:hover, .actionBtn a:hover, .btn-group a:hover, .button-list:hover { color: #fff; background: #205f5d; transform: translateY(-1px); }
+
+main > ul, #content > ul { padding-left: 1.25rem; }
+
+@media (max-width: 640px) {
+    header nav ul { margin-left: 0; }
+    header nav a { padding: 0.45rem 0.6rem; }
+    #catalogPage, #detailsPage, .createPage, #registerPage { margin-top: 1.25rem; }
+}
+
+[class^="category-name-"] {
+    color: #45a29e; /* default accent color for site */
+    font-weight: 700;
+}
+
+.category-name-Education {
+    color: #45a29e;
+}
+
+.category-name-Work {
+    color: #7bb6ff;
+}
+
+.no-category {
+    color: #a8b3c2;
+    font-style: italic;
+}

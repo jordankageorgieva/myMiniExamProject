@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <section class="categoryPage">
+        <h1>Create a category</h1>
+
+        <ul class="category-list">
+            <li>
+                <a href="{% url 'categories:create' 'Education' %}">
+                    Education
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'categories:create' 'Hobby' %}">
+                    Hobby
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'categories:create' 'Sport' %}">
+                    Sport
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'categories:create' 'Work' %}">
+                    Work
+                </a>
+            </li>
+        </ul>
+
+        <h2>Existing categories</h2>
+
+        <ul class="category-list">
+            {% for category in categories %}
+                <li>
+                    <span>{{ category.name }}</span>
+                    <a href="{% url 'categories:delete' category.pk %}">Delete</a>
+                </li>
+            {% empty %}
+                <li>No categories yet.</li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}
