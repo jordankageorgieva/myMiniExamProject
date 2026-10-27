@@ -20,6 +20,21 @@ class HomeView(ListView):
              return redirect('profiles:login')
         return super().dispatch(request, *args, **kwargs)
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        selected_status = self.request.GET.get('status', '')
+
+        if selected_status in Task.StatusChoices.values:
+            queryset = queryset.filter(status=selected_status)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Task.StatusChoices.choices
+        context['selected_status'] = self.request.GET.get('status', '')
+        return context
+
 
 class TaskCreateView(AttachProfileMixin, CreateView):
     model = Task
@@ -30,6 +45,11 @@ class TaskCreateView(AttachProfileMixin, CreateView):
 class TaskDetailView(DetailView):
     model = Task
     template_name = 'tasks/task-details.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not get_profile():
+            return redirect('profiles:login')
+        return super().dispatch(request, *args, **kwargs)
 
 class TaskUpdateView(AttachProfileMixin, UpdateView):
     model = Task
