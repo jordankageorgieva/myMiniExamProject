@@ -1,6 +1,11 @@
-from django.core.exceptions import ValidationError
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+# from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
+
+from profiles.managers import AppUserManager
+
 
 # Create your models here.
 class Profile(models.Model):
@@ -18,4 +23,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.username
+
+class AppUser(AbstractBaseUser, PermissionsMixin):
+    USERNAME_FIELD = 'email'
+
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
+
+    objects = AppUserManager()
 

@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-qo0ldolh$@_c_)ux$r#i=x!cwlr2gzxv3yz2_a82nc7q+smk5l"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -36,6 +36,7 @@ PROJECT_APPS= [
 ]
 
 INSTALLED_APPS = [
+    "unfold",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -149,3 +150,8 @@ MAILERS = {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
 }
+
+AUTH_USER_MODEL = 'profiles.AppUser'
+LOGIN_URL = "profiles:login"
+LOGIN_REDIRECT_URL = 'tasks:home'
+LOGOUT_REDIRECT_URL= "tasks:home"

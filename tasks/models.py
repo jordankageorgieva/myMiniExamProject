@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+UserModel = get_user_model()
 
 # Create your models here.
 class Task(models.Model):
@@ -17,18 +20,21 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     due_date = models.DateField(null=True, blank=True)
 
-    profile = models.ForeignKey(
-        to = 'profiles.Profile',
-        on_delete = models.CASCADE,
-        related_name = "tasks",
-        # null=True,
-        # blank=True,
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     category = models.ForeignKey(
         to='categories.Category',
-        on_delete=models.SET_NULL,
-        null=True,
+        on_delete=models.CASCADE,
+        related_name="tasks",
+    )
+
+    sub_category = models.ManyToManyField(
+        "categories.SubCategory",
         blank=True,
         related_name="tasks",
     )

@@ -6,7 +6,7 @@ from tasks.models import Task
 class TaskBaseForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = "__all__"
+        exclude = ('user',)
         widgets = {
             'title': forms.TextInput(
                 attrs={'placeholder': 'Task Title'}

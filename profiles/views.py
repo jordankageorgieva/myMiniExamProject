@@ -1,54 +1,96 @@
+from django.contrib.auth import get_user_model, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import QuerySet
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, DeleteView
+from django.views.generic import DetailView, DeleteView, CreateView
 
-from profiles.forms import ProfileForm
-from profiles.models import Profile
-from profiles.utils import get_profile
-from tasks.mixins import AttachProfileMixin
+from profiles.forms import AppUserCreateForm
+from profiles.mixins import UserAuthenticationMixin
+import logging
 
+logger = logging.getLogger(__name__)
 
 # Create your views here.
-def login_view(request: HttpRequest) -> HttpResponse:
-    profile = get_profile()
+UserModel = get_user_model()
 
-    if profile:
-        # todo add a redirect if a user is logged
-        return redirect('tasks:home')
 
-    form = ProfileForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('tasks:home')
+class RegisterAppUserView(CreateView):
+    model = UserModel
+    form_class = AppUserCreateForm
+    template_name = 'profiles/register-page.html'
+    success_url = reverse_lazy('profiles:login')
 
-    context = {
-        'form': form,
-    }
+    def form_valid(self, form):
+        # 1. Тук взимате речника с почистените и валидни данни от форма
+        user_data = form.cleaned_data
 
-    return render(request, 'profiles/home-no-profile.html', context)
+        # ВНИМАНИЕ: Паролата обикновено е в 'cleaned_data' като суров низ.
+        # Добра практика е да я маснете/скриете от съображения за сигурност!
+        logged_data = user_data.copy()
+        if "password1" in logged_data:
+            logged_data["password1"] = "********"
+        if "password2" in logged_data:
+            logged_data["password2"] = "********"
+        if "password" in logged_data:
+            logged_data["password"] = "********"
 
-class ProfileUpdateView(AttachProfileMixin, DetailView):
+        # 2. Логвате данните (ще се появят във вашия конзолен изход / лог файл)
+        logger.info(f"New user registration attempt with data: {logged_data}")
+
+        # 3. Важно: Винаги извиквайте super().form_valid(form),
+        # за да се запише реално обектът в базата данни и да работи success_url редиректът!
+        return super().form_valid(form)
+
+# def login_view(request: HttpRequest) -> HttpResponse:
+#     return render(request, 'accounts/login-page.html')
+
+class LoginAppUserView(LoginView):
+    template_name = 'profiles/login-page.html'
+
+# Create your views here.
+# def login_view(request: HttpRequest) -> HttpResponse:
+#     profile = get_profile()
+# 
+#     if profile:
+#         # todo add a redirect if a user is logged
+#         return redirect('tasks:home')
+# 
+#     form = ProfileForm(request.POST or None)
+#     if form.is_valid():
+#         form.save()
+#         return redirect('tasks:home')
+# 
+#     context = {
+#         'form': form,
+#     }
+# 
+#     return render(request, 'profiles/home-no-profile.html', context)
+
+class ProfileUpdateView(UserAuthenticationMixin, DetailView):
     template_name = 'profiles/profile-details.html'
 
+    login_message = 'Please log in to manage your profile.'
+
     def get_object(self, queryset=None):
-        return get_profile()
+        user = get_user(self.request)
+        print(f'The update user is {user}')
+        return user
 
-    def get_context_data(self, **kwargs: dict):
-        kwargs.update({
-            'tasks_count': self.object.tasks.count(),
-            'todo_tasks_count': self.object.tasks.filter(status='TODO').count(),
-        })
-        return super().get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs: dict):
+    #     kwargs.update({
+    #         'tasks_count': self.object.tasks.count() or 0,
+    #         'todo_tasks_count': self.object.tasks.filter(status='TODO').count() or 0,
+    #     })
+    #     return super().get_context_data(**kwargs)
 
-class ProfileDeleteView(DeleteView):
+class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'profiles/profile-delete.html'
     success_url = reverse_lazy('profiles:login')
 
     def get_object(self, queryset=None):
-        return get_profile()
+        user = get_user(self.request)
+        print(f'The delete user is {user}')
+        return user
 
 
 

@@ -3,6 +3,12 @@ from django.shortcuts import redirect
 
 from profiles.utils import get_profile
 
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.contrib.auth import get_user
+
+from tasks.models import Task
+
 
 class AttachProfileMixin:
     def get_initial(self) -> dict:
@@ -21,3 +27,18 @@ class AttachProfileMixin:
     def form_valid(self, form):
         form.instance.profile = get_profile()
         return super().form_valid(form)
+
+class TaskExistenceMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+
+        if not Task.objects.filter(user=user).exists():
+            messages.info(
+                request,
+                'You have no tasks yet. Please create your first task.'
+            )
+            return redirect('tasks:create')
+
+        return super().dispatch(request, *args, **kwargs)
+

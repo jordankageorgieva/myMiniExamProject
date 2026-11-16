@@ -5,8 +5,9 @@ from tasks import views
 app_name = 'tasks'
 
 urlpatterns = [
-    path('', views.HomeView.as_view(), name='home'),
+    # path('dashboard/', views.HomeView.as_view(), name='home'),
     path('tasks/', include([
+        path('', views.HomeView.as_view(), name='home'),
         path('create/', views.TaskCreateView.as_view(), name='create'),
         path('<int:pk>/', include([
             path('', views.TaskDetailView.as_view(), name='detail'),
