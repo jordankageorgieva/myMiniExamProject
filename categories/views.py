@@ -102,28 +102,6 @@ class SubCategoryCreate(LoginRequiredMixin, View):
 
 
 
-# class SubCategoryCreateView(LoginRequiredMixin, View):
-#     def post(self, request, category_pk, *args, **kwargs):
-#         category = get_object_or_404(
-#             Category,
-#             pk=category_pk,
-#             user=request.user,
-#         )
-#
-#         form = SubCategoryForm(request.POST)
-#         if form.is_valid():
-#             subcategory = form.save()
-#             subcategory.categories.add(category)
-#             messages.success(
-#                 request,
-#                 f"Subcategory '{subcategory.name}' was added to '{category.name}'."
-#             )
-#             return redirect(f"{reverse('categories:list')}?category={category.pk}")
-#
-#         messages.error(request, "Please enter a valid subcategory name.")
-#         return redirect(f"{reverse('categories:list')}?category={category.pk}")
-
-
 class CategoryListView(UserAuthenticationMixin, ListView):
     model = Category
     template_name = "categories/category-list.html"
@@ -153,5 +131,16 @@ class CategoryDeleteView(UserAuthenticationMixin, DeleteView):
     template_name = "categories/category-delete.html"
     context_object_name = "category"
     success_url = "/categories/"
+
+    def form_valid(self, form):
+        category = self.get_object()
+
+        for subcategory in category.subcategories.all():
+            if subcategory.categories.exclude(pk=category.pk).exists():
+                category.subcategories.remove(subcategory)
+            else:
+                subcategory.delete()
+
+        return super().form_valid(form)
 
 
