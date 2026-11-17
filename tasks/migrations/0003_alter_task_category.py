@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("categories", "0004_remove_category_profile_category_user"),
+        ("categories", "0001_initial"),
         ("tasks", "0002_task_user"),
     ]
 

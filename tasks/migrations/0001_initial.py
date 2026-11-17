@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("categories", "0002_subcategory"),
+        ("categories", "0001_initial"),
     ]
 
     operations = [
