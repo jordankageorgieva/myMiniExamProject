@@ -1,12 +1,15 @@
 from django.contrib.auth import get_user_model, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.db.models import Model
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, DeleteView, CreateView
 
 from profiles.forms import AppUserCreateForm
 from profiles.mixins import UserAuthenticationMixin
 import logging
+
+from tasks.models import Task
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +69,7 @@ class LoginAppUserView(LoginView):
 # 
 #     return render(request, 'profiles/home-no-profile.html', context)
 
-class ProfileUpdateView(UserAuthenticationMixin, DetailView):
+class ProfileDetailView(UserAuthenticationMixin, DetailView):
     template_name = 'profiles/profile-details.html'
 
     login_message = 'Please log in to manage your profile.'
@@ -76,12 +79,12 @@ class ProfileUpdateView(UserAuthenticationMixin, DetailView):
         print(f'The update user is {user}')
         return user
 
-    # def get_context_data(self, **kwargs: dict):
-    #     kwargs.update({
-    #         'tasks_count': self.object.tasks.count() or 0,
-    #         'todo_tasks_count': self.object.tasks.filter(status='TODO').count() or 0,
-    #     })
-    #     return super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs: dict):
+        kwargs.update({
+            'tasks_count': Task.objects.filter(user=self.object).count() or 0,
+            'todo_tasks_count': Task.objects.filter(user=self.object, status="TODO").count() or 0,
+        })
+        return super().get_context_data(**kwargs)
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'profiles/profile-delete.html'
