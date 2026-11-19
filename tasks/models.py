@@ -31,6 +31,8 @@ class Task(models.Model):
         to='categories.Category',
         on_delete=models.CASCADE,
         related_name="tasks",
+        blank=True,
+        null=True,
     )
 
     sub_category = models.ManyToManyField(

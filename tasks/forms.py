@@ -29,8 +29,16 @@ class TaskBaseForm(forms.ModelForm):
                     'class': 'form-control',
                 }
             ),
-            'profile': forms.HiddenInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['category'].empty_label = 'Select a category'
+        self.fields['category'].help_text = (
+            'Adding a category helps you organize and manage your tasks more effectively.'
+        )
+        self.fields['category'].required = False
 
 
 class TaskCreateForm(TaskBaseForm):
