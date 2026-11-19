@@ -47,10 +47,10 @@
         </ul>
 
 
-
-        <h2>Add subcategory</h2>
-
         {% if selected_category %}
+             <h2>Add subcategory</h2>
+
+
             <p>
                 Selected category: <strong>{{ selected_category.name }}</strong>
             </p>
@@ -67,22 +67,24 @@
         {% else %}
             <p>Please select a category first.</p>
         {% endif %}
-        <h2>Existing subcategories</h2>
 
-{% if selected_category %}
-    <label for="subcategory">Choose subcategory:</label>
+        {% if selected_category %}
+            <h2>Existing subcategories</h2>
 
-    <select name="subcategory" id="subcategory">
-        <option value="">-- Select subcategory --</option>
 
-        {% for subcategory in selected_category.subcategories.all%}
-            <option value="{{ subcategory.pk }}">
-                {{ subcategory.name }}
-            </option>
-        {% empty %}
-            <option disabled>No subcategories available</option>
-        {% endfor %}
-    </select>
-{% endif %}
+            <label for="subcategory">Choose subcategory:</label>
+
+            <select name="subcategory" id="subcategory">
+                <option value="">-- Select subcategory --</option>
+
+                {% for subcategory in selected_category.subcategories.all %}
+                    <option value="{{ subcategory.pk }}">
+                        {{ subcategory.name }}
+                    </option>
+                {% empty %}
+                    <option disabled>No subcategories available</option>
+                {% endfor %}
+            </select>
+        {% endif %}
     </section>
 {% endblock %}
